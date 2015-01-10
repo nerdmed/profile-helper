@@ -13,12 +13,33 @@ _.extend(ProfileHelper.prototype, {
         }
         return findIn(user.profile, path)
     },
-    set: function(path, value) {
-        var user = Meteor.user();
+    set: function(path, value, operator, options, callback) {
+        check(path, String);
 
-        path = path
+        var user = Meteor.user();
+        var operator = operator || "$set";
+        var modifier = {};
+        var valueMap = {};
+
+        modifier[operator] = valueMap;
+        valueMap["profile." + path] = value;
+
+        this.checkPath(path, user);
+
+        if (!user || !user.profile) {
+            if (operator) throw new Meteor.Error("Using Operators with no existing User is currently not supported");
+            if (Meteor.isClient) {
+                return Session.set("profile." + path, value);
+            }
+        }
+
+        Meteor.users.update(user._id, modifier, options, callback);
+    },
+    checkPath: function(path, user) {
+
+        var path = path
             .replace(/\[(\w+)\]/g, '.$1') // convert [] indexes to dot indexes
-        .replace(/^\./, ''); // strip any leading dot
+            .replace(/^\./, ''); // strip any leading dot
 
 
         var pathArray = path.split('.');
@@ -43,20 +64,6 @@ _.extend(ProfileHelper.prototype, {
             });
         }
 
-
-        // So far so good. Set the path to the value we provided.
-        // Mongo deals with making empty objects as needed along the way
-        var newValue = {};
-        newValue["profile." + path] = value;
-
-        if (!user || !user.profile) {
-            if (Meteor.isClient) {
-                return Session.set("profile." + path, value);
-            }
-        }
-        Meteor.users.update(Meteor.userId(), {
-            $set: newValue
-        });
     }
 
 });

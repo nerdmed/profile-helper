@@ -1,7 +1,7 @@
 # Profile Helper
-This helper is ment to assist with read/write operations to the users profile.
+This helper is ment to assist you with read/write operations to the users profile.
 It is only handling with the Meteor Accounts provided profile namespace.
-If there is no user logged in it is using the Session to work properly.
+
 
 ## Get Started
 
@@ -17,6 +17,23 @@ Create a Profile helper in your Namespace
 	
 	MyApp.profile.get("onboarding.messages.search");
 	-> true
+
+
+## Advanced Write Operations
+If you want to change the Operator to use for your profile field, you can just pass it as a third parameter.
+You can use all working Mongo Operators: $push, $addToSet, $pull etc..
+
+	MyApp.profile.set("myNumbers", [1,2,3]);
+	MyApp.profile.get("myNumbers");
+	-> [1,2,3]
+
+	// Add a number to the Array 
+	MyApp.profile.set("myNumbers", 21, "$addToSet");
+
+
+## No User Account - Experimental
+If your visitor has no user account the package will fallback using the Session.
+This will be improved and is still experimental
 
 
 ##Contribution
