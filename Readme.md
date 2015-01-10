@@ -29,6 +29,8 @@ You can use all working Mongo Operators: $push, $addToSet, $pull etc..
 
 	// Add a number to the Array 
 	MyApp.profile.set("myNumbers", 21, "$addToSet");
+	MyApp.profile.get("myNumbers");
+	-> [1,2,3,21]
 
 
 ## No User Account - Experimental
