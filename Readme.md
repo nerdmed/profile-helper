@@ -1,7 +1,6 @@
 # Profile Helper
 This helper is ment to assist you with read/write operations to the users profile.
-It is only handling with the Meteor Accounts provided profile namespace.
-
+It is only working with the the Meteor.user().profile namespace.
 
 ## Get Started
 
