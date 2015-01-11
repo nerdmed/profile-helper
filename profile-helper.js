@@ -26,7 +26,7 @@ _.extend(ProfileHelper.prototype, {
 
         this.checkPath(path, user);
 
-        if (!user || !user.profile) {
+        if (!user) {
             if (operator) throw new Meteor.Error("Using Operators with no existing User is currently not supported");
             if (Meteor.isClient) {
                 return Session.set("profile." + path, value);
